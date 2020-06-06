@@ -1,0 +1,12 @@
+# my-private-reg-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-reg
+spec:
+  containers:
+  - name: private-reg-container
+    image: 000000000000.dkr.ecr.us-west-2.amazonaws.com/area51/python-batch-job:latest
+  imagePullSecrets:
+  - name: regcred
+
