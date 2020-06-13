@@ -1,6 +1,10 @@
 #task.py
-import time
+import boto3
 
-print('Task starting...')
-time.sleep(5)
-print('Task ended, took 5 seconds')
+def main():
+  print("Running task...")
+  client = boto3.client('sts')
+  response = client.get_caller_identity()
+  print(response)
+
+main()

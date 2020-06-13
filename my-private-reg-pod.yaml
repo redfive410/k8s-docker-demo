@@ -6,6 +6,9 @@ metadata:
 spec:
   containers:
   - name: private-reg-container
-    image: ${REPO}/${NAMESPACE}/python-batch-job:latest
+    image: ${REPO}/${NAMESPACE}/python-sample-job:latest
+    envFrom:
+    - secretRef:
+        name: awscred
   imagePullSecrets:
   - name: regcred
