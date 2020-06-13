@@ -6,7 +6,6 @@ metadata:
 spec:
   containers:
   - name: private-reg-container
-    image: 000000000000.dkr.ecr.us-west-2.amazonaws.com/area51/python-batch-job:latest
+    image: ${REPO}/${NAMESPACE}/python-batch-job:latest
   imagePullSecrets:
   - name: regcred
-

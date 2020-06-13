@@ -51,7 +51,7 @@ metadata:
 spec:
   containers:
   - name: private-reg-container
-    image: 000000000000.dkr.ecr.us-west-2.amazonaws.com/area51/python-batch-job:latest
+    image: ${REPO}/${NAMESPACE}/python-batch-job:latest
   imagePullSecrets:
   - name: regcred
 ```
@@ -61,18 +61,23 @@ Commands
 # Test python task
 python3.7 task.py
 
+export REPO=[YOUR_REPO]
+export NAMESPACE=[YOUR_NAMESPACE]
+
 # Build, Test and Push docker image
 docker build .
-docker run 7490baba874b
-docker tag 7490baba874b python-batch-job:latest
-docker tag python-batch-job:latest 000000000000.dkr.ecr.us-west-2.amazonaws.com/area51/python-batch-job:latest
+docker run 30b1e6fe08fb
+docker tag 30b1e6fe08fb python-batch-job:latest
+docker tag python-batch-job:latest $REPO/$NAMESPACE/python-batch-job:latest
 
-aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 000000000000.dkr.ecr.us-west-2.amazonaws.com
-docker push 000000000000.dkr.ecr.us-west-2.amazonaws.com/area51/python-batch-job:latest
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $REPO
+docker push $REPO/$NAMESPACE/python-batch-job:latest
 
 # Pull docker image from ECR and run python task
-kubectl create secret generic regcred --from-file=.dockerconfigjson=/Users/username/.docker/config.json --type=kubernetes.io/dockerconfigjson
-kubectl apply -f my-private-reg-pod.yaml
+kubectl create secret generic regcred --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson
+# Fill out templated values and create pod
+envsubst < my-private-reg-pod.yaml | kubectl apply -f -
+
 kubectl get pods
 kubectl logs private-reg
 kubectl delete pod private-reg
